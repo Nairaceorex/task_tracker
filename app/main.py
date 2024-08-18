@@ -18,3 +18,9 @@ def create_task(task: TaskCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_task)
     return db_task
+
+
+@app.get("/tasks/", response_model=List[Task])
+def read_tasks(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    tasks = db.query(Task).offset(skip).limit(limit).all()
+    return tasks
